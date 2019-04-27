@@ -1,1 +1,3 @@
-in version baraye board esp parde ast ke dama va voroodi ha va rele ha ra modiriat mikonad
+version 2.0 ------------------------------------------------------------------------
+IO Board 8xy Software
+در این ورژن کل کتابخانه ها در حال مرتب سازی هستند و این ورژن یک ورژن جدا از برنچ مستر است.
