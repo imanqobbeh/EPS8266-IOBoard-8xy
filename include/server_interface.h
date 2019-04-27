@@ -52,7 +52,7 @@ void udp_start(void);
 sts_packet_udp get_packet_udp(char *str);
 void send_packet_udp(char *str);
 
-change_sts handler_wifi(int* _cmdid);
+change_sts handler_wifi(data_iot * _data_iot);
 void send_data_to_server(data_iot _data_input, json_builder_mode _Builder_mode);
 void json_packet_builder(char *str_out, data_iot _data_input, json_builder_mode _Builder_mode);
 

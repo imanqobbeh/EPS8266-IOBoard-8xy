@@ -244,7 +244,7 @@ uint8_t convert_sts_relay_to_reg_modbus(int _o1, int _o2, int _o3, int _o4, int 
 	
 	if(_o3 == RELAY_ON)
 		reg_data |= 0x04;
-
+	
 	if(_o4 == RELAY_ON)
 		reg_data |= 0x08;
 

@@ -74,6 +74,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 					#ifdef _DEBUG_CODE
 					Serial.print(" id khodam boooooooood :) ");
 					#endif
+					
 					if(root.containsKey("cmdid"))
 					{
 						_data_iot->cmd_id = root["cmdid"];
@@ -406,7 +407,6 @@ change_sts handler_wifi(data_iot * _data_iot)
 		relay_data_register = convert_sts_relay_to_reg_modbus(last_out1, last_out2, last_out3, last_out4, last_out5, last_out6, last_out7, last_out8);
 		while (1)
 		{
-
 			if (relay_control_total(relay_data_register, 0x10) == PROCESS_OK)
 			{
 				out1 = last_out1;

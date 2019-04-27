@@ -1,5 +1,6 @@
 #include "header_iot.h"
 
+#define DEF_RETRY_CONNECT_WIFI  100    // 100 * 50 = 5 second
 // ------------------------------------------------------------------------------------------------------
 
 data_iot data_iot_current, data_iot_last;
@@ -7,9 +8,10 @@ sts_led _sts_led = _led_off;
 
 void setup()
 {
+	init_uart();
 	init_data_struct_value(&data_iot_current);
 	init_data_struct_value(&data_iot_last);
-	LED_BLINKER(_led_off);
+	led_blinker(_led_off);
 	_sts_led = _led_off;
 }
 
@@ -34,7 +36,7 @@ void loop()
 				sts = 0;
 			}
 
-			if(++retry_connect > 100)
+			if(++retry_connect > DEF_RETRY_CONNECT_WIFI)
 			{
 				connect_to_wifi(_wifi_num_1_run);
 				retry_connect = 0;
@@ -76,7 +78,7 @@ void loop()
 				sts = 1;
 			}
 			
-			if(handler_wifi(&data_iot_current == _changed)
+			if(handler_wifi(&data_iot_current) == _changed)
 				send_data_to_server(data_iot_current, _json_resp_with_cmdid);
 
 			
