@@ -1,10 +1,22 @@
+#include "header_iot.h"
 
+#ifndef DEF_CONF_ESP8266
+#define DEF_CONF_ESP8266
 enum sts_led
 {
     _led_on,
     _led_off
 };
 
+enum sts_wifi{
+	_sts_wifi_connceted,
+	_sts_wifi_disconnected
+};
+
+enum sts_connect_to_wifi{
+	_connect_success,
+	_connect_fail
+};
 
 enum wifi_num{
 	_wifi_num_1_run,
@@ -22,4 +34,6 @@ void init_uart(void);
 
 double get_uid(void);
 
-void LED_BLINKER(sts_led _sts_led);
+void led_blinker(sts_led _sts_led);
+
+#endif

@@ -1,4 +1,6 @@
 
+#include "header_iot.h"
+
 #ifndef SERVER_INTERFACE_DEF
 #define SERVER_INTERFACE_DEF
 
@@ -17,16 +19,6 @@ typedef struct
 
 
 // -------------------------------------------------------------------------------------------------
-
-enum sts_wifi{
-	_sts_wifi_connceted,
-	_sts_wifi_disconnected
-};
-
-enum sts_connect_to_wifi{
-	_connect_success,
-	_connect_fail
-};
 
 
 enum sts_packet_udp{

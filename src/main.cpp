@@ -22,10 +22,8 @@ void loop()
 	int retry_connect = 0, sts = 0;
 	int ctr_timer_send_imalive = 0, ctr_timer_check_input = 0;
 	int ctr_go_to_pair = 0;
+	int pair_condition = 1;
 	
-	/////////////////
-	int pair_condition = 1;	
-	////////////////
 	while(1)
 	{
 		if(check_sts_wifi() == _sts_wifi_disconnected)	
@@ -35,7 +33,7 @@ void loop()
 				led_blinker(_led_off);
 				sts = 0;
 			}
-
+			
 			if(++retry_connect > DEF_RETRY_CONNECT_WIFI)
 			{
 				connect_to_wifi(_wifi_num_1_run);
@@ -81,14 +79,12 @@ void loop()
 			if(handler_wifi(&data_iot_current) == _changed)
 				send_data_to_server(data_iot_current, _json_resp_with_cmdid);
 
-			
 			if(++ctr_timer_check_input > 4)
 			{
 				ctr_timer_check_input = 0;
 				if(handker_modbus() == _changed)
 					send_data_to_server(data_iot_current, _json_sts_change);
 			}
-			
 
 			if(++ctr_timer_send_imalive > 400)
 			{

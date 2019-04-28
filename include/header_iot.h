@@ -1,3 +1,6 @@
+#ifndef DEF_HEADER_IO
+#define DEF_HEADER_IO
+
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
@@ -5,7 +8,7 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <ArduinoJson.h>
-
+#include <stdint.h>
 
 #include "type_data_iot.h"
 #include "conf_esp8266.h"
@@ -16,7 +19,6 @@
 #include "server_interface.h"
 #include "mainboard_interface.h"
 
-
-
+#endif
 
 

@@ -42,10 +42,10 @@ void send_packet_udp(char *str)
 	Udp.endPacket();
 }
 
-
-change_sts handler_wifi(data_iot * _data_iot)
+change_sts handler_wifi(data_iot* _data_iot)
 {
 	change_sts _change_sts = _unchanged;
+	data_iot tmp_data_iot;
 	char str_test[255];
 	StaticJsonBuffer<200> jsonBuffer;
 	
@@ -74,7 +74,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 					#ifdef _DEBUG_CODE
 					Serial.print(" id khodam boooooooood :) ");
 					#endif
-					
+
 					if(root.containsKey("cmdid"))
 					{
 						_data_iot->cmd_id = root["cmdid"];
@@ -96,7 +96,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 							#endif
 							if(root["data"]["o1"] == 1)
 							{
-								if(last_out1 == RELAY_OFF)
+								if(_data_iot->out1 == RELAY_OFF)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_1, _switch_on);
@@ -106,13 +106,13 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o1_on ");
 									#endif
-									last_out1 = RELAY_ON;
+									tmp_data_iot.out1 = RELAY_ON;
 									_change_sts = _changed;
 								}
 							}
 							else
 							{
-								if(last_out1 == RELAY_ON)
+								if(_data_iot->out1 == RELAY_ON)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_1, _switch_off);
@@ -122,7 +122,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o1_off ");
 									#endif
-									last_out1 = RELAY_OFF;
+									tmp_data_iot.out1 = RELAY_OFF;
 									_change_sts = _changed;
 								}
 							}
@@ -135,7 +135,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 							#endif
 							if(root["data"]["o2"] == 1)
 							{
-								if(last_out2 == RELAY_OFF)
+								if(_data_iot->out2 == RELAY_OFF)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_2, _switch_on);
@@ -144,22 +144,22 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o2_on ");
 									#endif
-									last_out2 = RELAY_ON;
+									tmp_data_iot.out2 = RELAY_ON;
 									_change_sts = _changed;
 								}
 							}
 							else
 							{
-								if(last_out2 == RELAY_ON)
+								if(_data_iot->out2 == RELAY_ON)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_2, _switch_off);
 									#endif
-
+									
 									#ifdef _DEBUG_CODE
 									Serial.print("o2_off ");
 									#endif
-									last_out2 = RELAY_OFF;
+									tmp_data_iot.out2 = RELAY_OFF;
 									_change_sts = _changed;
 								}
 							}
@@ -172,7 +172,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 							#endif
 							if(root["data"]["o3"] == 1)
 							{
-								if(last_out3 == RELAY_OFF)
+								if(_data_iot->out3 == RELAY_OFF)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_on);
@@ -181,13 +181,13 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o3_on ");
 									#endif
-									last_out3 = RELAY_ON;
+									tmp_data_iot.out3 = RELAY_ON;
 									_change_sts = _changed;
 								}
 							}
 							else
 							{
-								if(last_out3 == RELAY_ON)
+								if(_data_iot->out3 == RELAY_ON)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_off);
@@ -196,7 +196,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o3_off ");
 									#endif
-									last_out3 = RELAY_OFF;
+									tmp_data_iot.out3 = RELAY_OFF;
 									_change_sts = _changed;
 								}
 							}
@@ -208,7 +208,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 							#endif
 							if(root["data"]["o4"] == 1)
 							{
-								if(last_out4 == RELAY_OFF)
+								if(_data_iot->out4 == RELAY_OFF)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_on);
@@ -217,13 +217,13 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o4_on ");
 									#endif
-									last_out4 = RELAY_ON;
+									tmp_data_iot.out4 = RELAY_ON;
 									_change_sts = _changed;
 								}
 							}
 							else
 							{
-								if(last_out4 == RELAY_ON)
+								if(_data_iot->out4 == RELAY_ON)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_off);
@@ -232,7 +232,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o4_off ");
 									#endif
-									last_out4 = RELAY_OFF;
+									tmp_data_iot.out4 = RELAY_OFF;
 									_change_sts = _changed;
 								}
 							}
@@ -244,7 +244,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 							#endif
 							if(root["data"]["o5"] == 1)
 							{
-								if(last_out5 == RELAY_OFF)
+								if(_data_iot->out5 == RELAY_OFF)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_on);
@@ -253,13 +253,13 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o5_on ");
 									#endif
-									last_out5 = RELAY_ON;
+									tmp_data_iot.out5 = RELAY_ON;
 									_change_sts = _changed;
 								}
 							}
 							else
 							{
-								if(last_out5 == RELAY_ON)
+								if(_data_iot->out5 == RELAY_ON)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_off);
@@ -268,7 +268,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o5_off ");
 									#endif
-									last_out5 = RELAY_OFF;
+									tmp_data_iot.out5 = RELAY_OFF;
 									_change_sts = _changed;
 								}
 							}
@@ -280,7 +280,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 							#endif
 							if(root["data"]["o6"] == 1)
 							{
-								if(last_out6 == RELAY_OFF)
+								if(_data_iot->out6 == RELAY_OFF)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_on);
@@ -289,13 +289,13 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o6_on ");
 									#endif
-									last_out6 = RELAY_ON;
+									tmp_data_iot.out6 = RELAY_ON;
 									_change_sts = _changed;
 								}
 							}
 							else
 							{
-								if(last_out6 == RELAY_ON)
+								if(_data_iot->out6 == RELAY_ON)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_off);
@@ -304,7 +304,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o6_off ");
 									#endif
-									last_out6 = RELAY_OFF;
+									tmp_data_iot.out6 = RELAY_OFF;
 									_change_sts = _changed;
 								}
 							}
@@ -316,7 +316,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 							#endif
 							if(root["data"]["o7"] == 1)
 							{
-								if(last_out7 == RELAY_OFF)
+								if(_data_iot->out7 == RELAY_OFF)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_on);
@@ -325,13 +325,13 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o7_on ");
 									#endif
-									last_out7 = RELAY_ON;
+									tmp_data_iot.out7 = RELAY_ON;
 									_change_sts = _changed;
 								}
 							}
 							else
 							{
-								if(last_out7 == RELAY_ON)
+								if(_data_iot->out7 == RELAY_ON)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_off);
@@ -340,7 +340,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o7_off ");
 									#endif
-									last_out7 = RELAY_OFF;
+									tmp_data_iot.out7 = RELAY_OFF;
 									_change_sts = _changed;
 								}
 							}
@@ -352,7 +352,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 							#endif
 							if(root["data"]["o8"] == 1)
 							{
-								if(last_out8 == RELAY_OFF)
+								if(_data_iot->out8 == RELAY_OFF)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_on);
@@ -361,13 +361,13 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o7_on ");
 									#endif
-									last_out8 = RELAY_ON;
+									tmp_data_iot.out8 = RELAY_ON;
 									_change_sts = _changed;
 								}
 							}
 							else
 							{
-								if(last_out8 == RELAY_ON)
+								if(_data_iot->out8 == RELAY_ON)
 								{
 									#ifdef _RELEASE_CODE
 									//switch_control(_num_switch_3, _switch_off);
@@ -376,7 +376,7 @@ change_sts handler_wifi(data_iot * _data_iot)
 									#ifdef _DEBUG_CODE
 									Serial.print("o7_off ");
 									#endif
-									last_out8 = RELAY_OFF;
+									tmp_data_iot.out8 = RELAY_OFF;
 									_change_sts = _changed;
 								}
 							}

@@ -1,5 +1,4 @@
 #include "conf_esp8266.h"
-#include "header_iot.h"
 
 
 char ssid1_run[30] = "ovio";
@@ -58,7 +57,7 @@ double get_uid(void)
     return ESP.getChipId();
 }
 
-void LED_BLINKER(sts_led _sts_led)
+void led_blinker(sts_led _sts_led)
 {
     switch(_sts_led)
     {
