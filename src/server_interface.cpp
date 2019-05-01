@@ -21,8 +21,8 @@ char ip_server_ovio[16] = "192.168.1.255";
 
 #ifdef VAHED_66
 
-const char *ssid1 = "ovio";
-const char *password1 = "40800930912";
+const char *ssid1 = "smarthome";
+const char *password1 = "S12345678";
 
 const char *ssid2 = "Netware2";
 const char *password2 = "40800930912";
