@@ -528,7 +528,7 @@ change_sts handker_modbus(data_iot* _data_iot)
 			tmp = register_modbus[2] - tmp_data_iot.temperatur;
 		else
 			tmp = tmp_data_iot.temperatur - register_modbus[2];
-
+		
 		if(tmp >= 60)
 		{
 			last_temperature = register_modbus[2];

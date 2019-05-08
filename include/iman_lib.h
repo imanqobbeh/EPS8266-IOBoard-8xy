@@ -1,4 +1,4 @@
-#include <Arduino.h>
+#include "header_iot.h"
 
 #ifndef IMAN_LIB_DEF
 #define IMAN_LIB_DEF

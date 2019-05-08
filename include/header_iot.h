@@ -19,6 +19,8 @@
 #include "server_interface.h"
 #include "mainboard_interface.h"
 
+#include "iman_lib.h"
+
 #endif
 
 

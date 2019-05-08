@@ -1,6 +1,6 @@
 #include "type_data_iot.h"
 
-void init_data_struct_value(data_iot* data_input);
+void init_data_struct_value(data_iot* data_input)
 {
 	data_input->uid = get_uid();
 	data_input->out1 = STS_IO_OFF;

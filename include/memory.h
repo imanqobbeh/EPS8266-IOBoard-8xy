@@ -1,8 +1,7 @@
+#include "header_iot.h"
+
 #ifndef _MEMORY_H
 #define _MEMORY_H
-
-#include "EEPROM.h"
-#include <Arduino.h>
 
 #define SIZE_OF_EMULATION_EEPROM 512
 
