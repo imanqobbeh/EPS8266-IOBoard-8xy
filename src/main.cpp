@@ -45,8 +45,7 @@ void loop()
 				if(++ctr_timer_check_input > 4)
 				{
 					ctr_timer_check_input = 0;
-					if(handker_modbus() == _changed)
-						send_data_to_server(data_iot_current, _json_resp_without_cmdid);
+					handker_modbus();
 				}
 			}
 			delay(50);
@@ -77,7 +76,7 @@ void loop()
 			}
 			
 			if(handler_wifi(&data_iot_current) == _changed)
-				send_data_to_server(data_iot_current, _json_resp_with_cmdid);
+				send_data_to_server(data_iot_current, _json_response);
 
 			if(++ctr_timer_check_input > 4)
 			{

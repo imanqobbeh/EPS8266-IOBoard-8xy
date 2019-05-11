@@ -373,20 +373,28 @@ void send_data_to_server(data_iot _data_input, json_builder_mode _Builder_mode)
 void json_packet_builder(char *str_out, data_iot _data_input, json_builder_mode _Builder_mode)
 {
 	memset(str_out, 0, 255);
+	sprintf(str_out, "\"id\":%.0f",_data_input.uid);
+	strcat(str_out ,",\"model\":\"IO8A-01\"");
+	strcat(str_out ,",\"ver\":\"1.01\"");
+	strcat(str_out ,",\"ver\":\"1.01\"");
 	switch(_Builder_mode)
 	{
-		case _json_resp_with_cmdid:
-			sprintf(str_out, "{\"id\":%.0f,\"type\":\"reply\",\"cmdid\":%d,\"model\":\"IO8A-01\",\"ver\":\"1.01\",\"data\":{\"o1\":%d,\"o2\":%d,\"o3\":%d,\"o4\":%d,\"o5\":%d,\"o6\":%d,\"o7\":%d,\"o8\":%d,\"i1\":%d,\"i2\":%d,\"i3\":%d,\"i4\":%d,\"i5\":%d,\"i6\":%d,\"i7\":%d,\"i8\":%d,\"i9\":%d}}", _data_input.uid, _data_input.cmd_id, _data_input.out1, _data_input.out2, _data_input.out3, _data_input.out4, _data_input.out5, _data_input.out6, _data_input.out7, _data_input.out8, _data_input.input1, _data_input.input2, _data_input.input3, _data_input.input4, _data_input.input5, _data_input.input6, _data_input.input7, _data_input.input8, _data_input.input9);
-			break;
-		case _json_resp_without_cmdid:
-			sprintf(str_out, "{\"id\":%.0f,\"type\":\"stchng\",\"model\":\"IO8A-01\",\"ver\":\"1.01\",\"data\":{\"o1\":%d,\"o2\":%d,\"o3\":%d,\"o4\":%d,\"o5\":%d,\"o6\":%d,\"o7\":%d,\"o8\":%d,\"i1\":%d,\"i2\":%d,\"i3\":%d,\"i4\":%d,\"i5\":%d,\"i6\":%d,\"i7\":%d,\"i8\":%d,\"i9\":%d}}", ovio_device_id, _o1, _o2, _o3, _o4, _o5, _o6, _o7, _o8, _i1, _i2, _i3, _i4, _i5, _i6, _i7, _i8, _i9);
+		case _json_response:
+			strcat(str_out,"\"type\":\"reply\",\"cmdid\":%d", _data_input.cmd_id);
 			break;
 		case _json_sts_change:
-			sprintf(str_out, "{\"id\":%.0f,\"type\":\"stchng\",\"model\":\"IO8A-01\",\"ver\":\"1.01\",\"data\":{\"o1\":%d,\"o2\":%d,\"o3\":%d,\"o4\":%d,\"o5\":%d,\"o6\":%d,\"o7\":%d,\"o8\":%d,\"i1\":%d,\"i2\":%d,\"i3\":%d,\"i4\":%d,\"i5\":%d,\"i6\":%d,\"i7\":%d,\"i8\":%d}}", ovio_device_id, _data_input.o1, _data_input.o2, _data_input.o3, _data_input.o4, _data_input.o5, _data_input.o6, _data_input.o7, _data_input.o8, _data_input.i1, _data_input.i2, _data_input.i3, _data_input.i4, _data_input.i5, _data_input.i6, _data_input.i7, _data_input.i8);
+			strcat(str_out,"\"type\":\"stchng\"");
 			break;
 		case _json_alive:
-			sprintf(str_out, "{\"id\":%.0f,\"type\":\"imalive\",\"model\":\"IO8A-01\",\"ver\":\"1.01\",\"data\":{\"o1\":%d,\"o2\":%d,\"o3\":%d,\"o4\":%d,\"o5\":%d,\"o6\":%d,\"o7\":%d,\"o8\":%d,\"i1\":%d,\"i2\":%d,\"i3\":%d,\"i4\":%d,\"i5\":%d,\"i6\":%d,\"i7\":%d,\"i8\":%d}}", ovio_device_id, _o1, _o2, _o3, _o4, _o5, _o6, _o7, _o8, _i1, _i2, _i3, _i4, _i5, _i6, _i7, _i8);
+			strcat(str_out,"\"type\":\"imalive\"");
 			break;
 	}
+	strcat(str_out,"\"data\":{\"")
+
+	switch()
+	{
+		
+	}
+	strcat(str_out,"\"data\":{\"o1\":%d,\"o2\":%d,\"o3\":%d,\"o4\":%d,\"o5\":%d,\"o6\":%d,\"o7\":%d,\"o8\":%d,\"i1\":%d,\"i2\":%d,\"i3\":%d,\"i4\":%d,\"i5\":%d,\"i6\":%d,\"i7\":%d,\"i8\":%d}}", ovio_device_id, _o1, _o2, _o3, _o4, _o5, _o6, _o7, _o8, _i1, _i2, _i3, _i4, _i5, _i6, _i7, _i8);
 }
 //WiFi.macAddress(mac);

@@ -29,8 +29,7 @@ enum sts_packet_udp{
 
 enum json_builder_mode
 {
-	_json_resp_with_cmdid,
-	_json_resp_without_cmdid,
+	_json_response,
 	_json_sts_change,
 	_json_alive
 };
