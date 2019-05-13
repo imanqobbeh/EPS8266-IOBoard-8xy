@@ -2,6 +2,10 @@
 
 #ifndef DEF_CONF_ESP8266
 #define DEF_CONF_ESP8266
+
+
+
+
 enum sts_led
 {
     _led_on,

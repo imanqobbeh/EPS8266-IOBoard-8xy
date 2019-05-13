@@ -374,9 +374,9 @@ void json_packet_builder(char *str_out, data_iot _data_input, json_builder_mode 
 {
 	memset(str_out, 0, 255);
 	sprintf(str_out, "\"id\":%.0f",_data_input.uid);
-	strcat(str_out ,",\"model\":\"IO8A-01\"");
+	strcat(str_out ,",\"model\":\"IO8A-01\"");#define SOFT_VERSION ""
 	strcat(str_out ,",\"ver\":\"1.01\"");
-	strcat(str_out ,",\"ver\":\"1.01\"");
+	strcat(str_out ,",\"ver\":\"esp-8xy v2.0\"");
 	switch(_Builder_mode)
 	{
 		case _json_response:
@@ -389,12 +389,9 @@ void json_packet_builder(char *str_out, data_iot _data_input, json_builder_mode 
 			strcat(str_out,"\"type\":\"imalive\"");
 			break;
 	}
-	strcat(str_out,"\"data\":{\"")
-
-	switch()
-	{
-		
-	}
+	
+	strcat(str_out,"\"data\":{\"");
+	strcat(str_out,"\"o1\":%d", );
 	strcat(str_out,"\"data\":{\"o1\":%d,\"o2\":%d,\"o3\":%d,\"o4\":%d,\"o5\":%d,\"o6\":%d,\"o7\":%d,\"o8\":%d,\"i1\":%d,\"i2\":%d,\"i3\":%d,\"i4\":%d,\"i5\":%d,\"i6\":%d,\"i7\":%d,\"i8\":%d}}", ovio_device_id, _o1, _o2, _o3, _o4, _o5, _o6, _o7, _o8, _i1, _i2, _i3, _i4, _i5, _i6, _i7, _i8);
 }
 //WiFi.macAddress(mac);

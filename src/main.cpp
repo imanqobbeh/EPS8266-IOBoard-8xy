@@ -77,7 +77,7 @@ void loop()
 			
 			if(handler_wifi(&data_iot_current) == _changed)
 				send_data_to_server(data_iot_current, _json_response);
-
+			
 			if(++ctr_timer_check_input > 4)
 			{
 				ctr_timer_check_input = 0;
