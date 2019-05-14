@@ -4,8 +4,6 @@
 #define DEF_CONF_ESP8266
 
 
-
-
 enum sts_led
 {
     _led_on,
@@ -28,7 +26,6 @@ enum wifi_num{
 	_wifi_num_3_alter_run
 };
 
-void connect_to_wifi(wifi_num _wifi_num);
 void init_wifi(wifi_num _wifi_num);
 sts_wifi check_sts_wifi(void);
 

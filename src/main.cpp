@@ -8,6 +8,7 @@ sts_led _sts_led = _led_off;
 
 void setup()
 {
+	init_digital_io();
 	init_uart();
 	init_data_struct_value(&data_iot_current);
 	init_data_struct_value(&data_iot_last);
@@ -36,7 +37,7 @@ void loop()
 			
 			if(++retry_connect > DEF_RETRY_CONNECT_WIFI)
 			{
-				connect_to_wifi(_wifi_num_1_run);
+				init_wifi(_wifi_num_1_run);
 				retry_connect = 0;
 			}
 
@@ -45,7 +46,7 @@ void loop()
 				if(++ctr_timer_check_input > 4)
 				{
 					ctr_timer_check_input = 0;
-					handker_modbus();
+					handker_modbus(&data_iot_current);
 				}
 			}
 			delay(50);
@@ -81,7 +82,7 @@ void loop()
 			if(++ctr_timer_check_input > 4)
 			{
 				ctr_timer_check_input = 0;
-				if(handker_modbus() == _changed)
+				if(handker_modbus(&data_iot_current) == _changed)
 					send_data_to_server(data_iot_current, _json_sts_change);
 			}
 

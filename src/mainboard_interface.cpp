@@ -520,7 +520,7 @@ change_sts handker_modbus(data_iot* _data_iot)
 
 			_change_sts = _changed;
 		}
-
+		/*
 		uint16_t tmp;
 		tmp_data_iot.temperatur = _data_iot->temperatur;
 
@@ -535,6 +535,7 @@ change_sts handker_modbus(data_iot* _data_iot)
 			_data_iot->temperatur = tmp_data_iot.temperatur;
 			_change_sts = _changed;
 		}
+		*/
 	}
 	
 	return _change_sts;
