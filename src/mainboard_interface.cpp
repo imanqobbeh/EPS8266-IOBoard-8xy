@@ -234,226 +234,58 @@ uint8_t convert_sts_relay_to_reg_modbus(data_iot _data_iot)
 {
 	uint8 reg_data = 0;
 
-	if(_data_iot.out1 == RELAY_ON)
-		reg_data |= 0x01;
-	
-	if(_data_iot.out2 == RELAY_ON)
-		reg_data |= 0x02;
-	
-	if(_data_iot.out3 == RELAY_ON)
-		reg_data |= 0x04;
+	for(int ctr = 0; ctr < 8; ctr++)
+		if(_data_iot.out[ctr] == RELAY_ON)
+			reg_data |= (0x01 << ctr);
 
-	if(_data_iot.out4 == RELAY_ON)
-		reg_data |= 0x08;
-
-	if(_data_iot.out5 == RELAY_ON)
-		reg_data |= 0x10;
-
-	if(_data_iot.out6 == RELAY_ON)
-		reg_data |= 0x20;
-
-	if(_data_iot.out7 == RELAY_ON)
-		reg_data |= 0x40;
-
-	if(_data_iot.out8 == RELAY_ON)
-		reg_data |= 0x80;
-	
 	return reg_data;
 }
 
-change_sts handker_modbus(data_iot* _data_iot)
+change_sts handler_modbus(data_iot* _data_iot_current, data_iot* _data_iot_new, int handl_mode)
 {
 	change_sts _change_sts = _unchanged, _change_sts_input = _unchanged;
 	uint16_t register_modbus[10];
 	data_iot tmp_data_iot;
 
-	tmp_data_iot.out1 = _data_iot->out1;
-    tmp_data_iot.out2 = _data_iot->out2;
-	tmp_data_iot.out3 = _data_iot->out3;
-	tmp_data_iot.out4 = _data_iot->out4;
-	tmp_data_iot.out5 = _data_iot->out5;
-	tmp_data_iot.out6 = _data_iot->out6;
-	tmp_data_iot.out7 = _data_iot->out7;
-	tmp_data_iot.out8 = _data_iot->out8;
-	
-
-	if (read_register(0, 2, 0x10, register_modbus) == PROCESS_OK)
+	if(handl_mode == 1)
 	{
-		if (register_modbus[0] != last_sts_input)
-		{	
-			if(/*sts_pair_io*/0) // pair ----- khalil ;/
-			{
-				uint16_t tmp_last_sts_input;
-				tmp_last_sts_input = register_modbus[0];
-				tmp_last_sts_input ^= last_sts_input;
-				
-				if((tmp_last_sts_input & 0x01) == 0x01)
-				{
-					if(_data_iot->out1 == RELAY_OFF)
-					{
-						#ifdef _DEBUG_CODE
-						Serial.print("o1_on ");
-						#endif
-						tmp_data_iot.out1 = RELAY_ON;
-					}
-					else
-					{	
-						#ifdef _DEBUG_CODE
-						Serial.print("o1_off ");
-						#endif
-						tmp_data_iot.out1 = RELAY_OFF;
-					}
-					_change_sts_input = _changed;
-				}
+		
+	}
+	if(handl_mode == 0)
+	{
+		for(int ctr = 0; ctr < 8; ctr++)
+			tmp_data_iot.out[ctr] = _data_iot_current->out[ctr];
 
-				if((tmp_last_sts_input & 0x02) == 0x02)
+		if(read_register(0, 2, 0x10, register_modbus) == PROCESS_OK)
+		{
+			if (register_modbus[0] != last_sts_input)
+			{	
+				if(/*sts_pair_io*/0) // pair ----- khalil ;/
 				{
-					if(_data_iot->out2 == RELAY_OFF)
+					uint16_t tmp_last_sts_input;
+					tmp_last_sts_input = register_modbus[0];
+					tmp_last_sts_input ^= last_sts_input;
+					
+					for(int ctr = 0; ctr < 8; ctr++)
 					{
-						#ifdef _DEBUG_CODE
-						Serial.print("o2_on ");
-						#endif
-						tmp_data_iot.out2 = RELAY_ON;
+						if((tmp_last_sts_input & (INPUT_X << 8)) == (INPUT_X << 8))
+						{
+							if(_data_iot_current->out[ctr] == RELAY_OFF)
+								tmp_data_iot.out[ctr] = RELAY_ON;
+							else
+								tmp_data_iot.out[ctr] = RELAY_OFF;
+						}
 					}
-					else
-					{	
-						#ifdef _DEBUG_CODE
-						Serial.print("o2_off ");
-						#endif
-						tmp_data_iot.out2 = RELAY_OFF;
-					}
-					_change_sts_input = _changed;
-				}
 
-				if((tmp_last_sts_input & 0x04) == 0x04)
-				{
-					if(_data_iot->out3 == RELAY_OFF)
-					{
-						#ifdef _DEBUG_CODE
-						Serial.print("o3_on ");
-						#endif
-						tmp_data_iot.out3 = RELAY_ON;
-					}
-					else
-					{	
-						#ifdef _DEBUG_CODE
-						Serial.print("o3_off ");
-						#endif
-						tmp_data_iot.out3 = RELAY_OFF;
-					}
-					_change_sts_input = _changed;
-				}
-
-				if((tmp_last_sts_input & 0x08) == 0x08)
-				{
-					if(_data_iot->out4 == RELAY_OFF)
-					{
-						#ifdef _DEBUG_CODE
-						Serial.print("o4_on ");
-						#endif
-						tmp_data_iot.out4 = RELAY_ON;
-					}
-					else
-					{	
-						#ifdef _DEBUG_CODE
-						Serial.print("o4_off ");
-						#endif
-						tmp_data_iot.out4 = RELAY_OFF;
-					}
-					_change_sts_input = _changed;
-				}
-				if((tmp_last_sts_input & 0x10) == 0x10)
-				{
-					if(_data_iot->out5 == RELAY_OFF)
-					{
-						#ifdef _DEBUG_CODE
-						Serial.print("o5_on ");
-						#endif
-						tmp_data_iot.out5 = RELAY_ON;
-					}
-					else
-					{	
-						#ifdef _DEBUG_CODE
-						Serial.print("o5_off ");
-						#endif
-						tmp_data_iot.out5 = RELAY_OFF;
-					}
-					_change_sts_input = _changed;
-				}
-				if((tmp_last_sts_input & 0x20) == 0x20)
-				{
-					if(_data_iot->out6 == RELAY_OFF)
-					{
-						#ifdef _DEBUG_CODE
-						Serial.print("o6_on ");
-						#endif
-						tmp_data_iot.out6 = RELAY_ON;
-					}
-					else
-					{	
-						#ifdef _DEBUG_CODE
-						Serial.print("o6_off ");
-						#endif
-						tmp_data_iot.out6 = RELAY_OFF;
-					}
-					_change_sts_input = _changed;
-				}
-				if((tmp_last_sts_input & 0x40) == 0x40)
-				{
-					if(_data_iot->out7 == RELAY_OFF)
-					{
-						#ifdef _DEBUG_CODE
-						Serial.print("o7_on ");
-						#endif
-						tmp_data_iot.out7 = RELAY_ON;
-					}
-					else
-					{	
-						#ifdef _DEBUG_CODE
-						Serial.print("o7_off ");
-						#endif
-						tmp_data_iot.out7 = RELAY_OFF;
-					}
-					_change_sts_input = _changed;
-				}
-				if((tmp_last_sts_input & 0x80) == 0x80)
-				{
-					if(_data_iot->out8 == RELAY_OFF)
-					{
-						#ifdef _DEBUG_CODE
-						Serial.print("o8_on ");
-						#endif
-						tmp_data_iot.out8 = RELAY_ON;
-					}
-					else
-					{	
-						#ifdef _DEBUG_CODE
-						Serial.print("o8_off ");
-						#endif
-						tmp_data_iot.out8 = RELAY_OFF;
-					}
-					_change_sts_input = _changed;
-				}
-
-				if(_change_sts_input == _changed)
-				{
-					//relay_control_total(0x06, 0x10);
 					int retry = 0;
 					uint8_t relay_data_register;
 					relay_data_register = convert_sts_relay_to_reg_modbus(tmp_data_iot);
 					while (1)
 					{
-
-						if (relay_control_total(relay_data_register, 0x10) == PROCESS_OK)
+						if(relay_control_total(relay_data_register, 0x10) == PROCESS_OK)
 						{
-							_data_iot->out1 = tmp_data_iot.out1;
-							_data_iot->out2 = tmp_data_iot.out2;
-							_data_iot->out3 = tmp_data_iot.out3;
-							_data_iot->out4 = tmp_data_iot.out4;
-							_data_iot->out5 = tmp_data_iot.out5;
-							_data_iot->out6 = tmp_data_iot.out6;
-							_data_iot->out7 = tmp_data_iot.out7;
-							_data_iot->out8 = tmp_data_iot.out8;
+							for(int ctr = 0; ctr < 8; ctr++)
+								_data_iot_current->out[ctr] =  tmp_data_iot.out[ctr];
 							break;
 						}
 						else
@@ -468,75 +300,40 @@ change_sts handker_modbus(data_iot* _data_iot)
 						}
 					}
 				}
-				///
 
+				last_sts_input = register_modbus[0];
+				for(int ctr = 0; ctr < 8; ctr++)
+				{
+					if((last_sts_input & (INPUT_X << ctr)) == (INPUT_X << ctr))
+						_data_iot_current->input[ctr] = INPUT_HIGH;
+					else
+						_data_iot_current->input[ctr] = INPUT_LOW;
+				}
+
+				if((last_sts_input & 0x0100) == 0x0100)
+					_data_iot_current->key[0] = INPUT_HIGH;
+				else
+					_data_iot_current->key[0] = INPUT_LOW;
+
+				_change_sts = _changed;
 			}
+			/*
+			uint16_t tmp;
+			tmp_data_iot.temperatur = _data_iot->temperatur;
 
-			last_sts_input = register_modbus[0];
-			if((last_sts_input & 0x01) == 0x01)
-				_data_iot->input1 = INPUT_HIGH;
+			if(register_modbus[2] >= tmp_data_iot.temperatur)
+				tmp = register_modbus[2] - tmp_data_iot.temperatur;
 			else
-				_data_iot->input1 = INPUT_LOW;
-
-			if((last_sts_input & 0x02) == 0x02)
-				_data_iot->input2 = INPUT_HIGH;
-			else
-				_data_iot->input2 = INPUT_LOW;
-
-			if((last_sts_input & 0x04) == 0x04)
-				_data_iot->input3 = INPUT_HIGH;
-			else
-				_data_iot->input3 = INPUT_LOW;
-
-			if((last_sts_input & 0x08) == 0x08)
-				_data_iot->input4 = INPUT_HIGH;
-			else
-				_data_iot->input4 = INPUT_LOW;
-
-			if((last_sts_input & 0x10) == 0x10)
-				_data_iot->input5 = INPUT_HIGH;
-			else
-				_data_iot->input5 = INPUT_LOW;
-
-			if((last_sts_input & 0x20) == 0x20)
-				_data_iot->input6 = INPUT_HIGH;
-			else
-				_data_iot->input6 = INPUT_LOW;
-
-			if((last_sts_input & 0x40) == 0x40)
-				_data_iot->input7 = INPUT_HIGH;
-			else
-				_data_iot->input7 = INPUT_LOW;
-
-			if((last_sts_input & 0x80) == 0x80)
-				_data_iot->input8 = INPUT_HIGH;
-			else
-				_data_iot->input8 = INPUT_LOW;
-
-			if((last_sts_input & 0x0100) == 0x0100)
-				_data_iot->key1 = INPUT_HIGH;
-			else
-				_data_iot->key1 = INPUT_LOW;
-
-			_change_sts = _changed;
+				tmp = tmp_data_iot.temperatur - register_modbus[2];
+			
+			if(tmp >= 60)
+			{
+				last_temperature = register_modbus[2];
+				_data_iot->temperatur = tmp_data_iot.temperatur;
+				_change_sts = _changed;
+			}
+			*/
 		}
-		/*
-		uint16_t tmp;
-		tmp_data_iot.temperatur = _data_iot->temperatur;
-
-		if(register_modbus[2] >= tmp_data_iot.temperatur)
-			tmp = register_modbus[2] - tmp_data_iot.temperatur;
-		else
-			tmp = tmp_data_iot.temperatur - register_modbus[2];
-		
-		if(tmp >= 60)
-		{
-			last_temperature = register_modbus[2];
-			_data_iot->temperatur = tmp_data_iot.temperatur;
-			_change_sts = _changed;
-		}
-		*/
 	}
-	
 	return _change_sts;
 }

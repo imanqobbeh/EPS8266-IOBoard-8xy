@@ -3,7 +3,7 @@
 #define DEF_RETRY_CONNECT_WIFI  100    // 100 * 50 = 5 second
 // ------------------------------------------------------------------------------------------------------
 
-data_iot data_iot_current, data_iot_last;
+data_iot data_iot_current, data_iot_received;
 sts_led _sts_led = _led_off;
 
 void setup()
@@ -11,7 +11,6 @@ void setup()
 	init_digital_io();
 	init_uart();
 	init_data_struct_value(&data_iot_current);
-	init_data_struct_value(&data_iot_last);
 	led_blinker(_led_off);
 	_sts_led = _led_off;
 }
@@ -40,13 +39,13 @@ void loop()
 				init_wifi(_wifi_num_1_run);
 				retry_connect = 0;
 			}
-
+			
 			if(pair_condition == 1)
 			{
 				if(++ctr_timer_check_input > 4)
 				{
 					ctr_timer_check_input = 0;
-					handker_modbus(&data_iot_current);
+					handler_modbus(&data_iot_current, &data_iot_received, 0);
 				}
 			}
 			delay(50);
@@ -76,13 +75,38 @@ void loop()
 				sts = 1;
 			}
 			
-			if(handler_wifi(&data_iot_current) == _changed)
+			if(handler_wifi(&data_iot_current, &data_iot_received) == _changed)
+			{
+				//relay_control_total(0x06, 0x10);	
+				
+				int retry = 0;
+				uint8_t relay_data_register;
+				relay_data_register = convert_sts_relay_to_reg_modbus(data_iot_received);
+				while (1)
+				{
+					if(relay_control_total(relay_data_register, 0x10) == PROCESS_OK)
+					{
+						for(int ctr = 0; ctr < 8; ctr++)
+							data_iot_current.out[ctr] = data_iot_received.out[ctr];
+						break;
+					}
+					else
+					{
+						if (retry > RETRY_NUM)
+						{
+							delay(1000);
+							break;
+						}
+						retry++;
+						delay(200);
+					}
+				}
 				send_data_to_server(data_iot_current, _json_response);
-			
+			}
 			if(++ctr_timer_check_input > 4)
 			{
 				ctr_timer_check_input = 0;
-				if(handker_modbus(&data_iot_current) == _changed)
+				if(handler_modbus(&data_iot_current, &data_iot_received, 0) == _changed)
 					send_data_to_server(data_iot_current, _json_sts_change);
 			}
 

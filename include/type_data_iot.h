@@ -11,9 +11,9 @@ enum sts_io{
 struct data_iot
 {
     /* data */
-    uint8_t out1, out2, out3, out4, out5, out6, out7, out8;
-    uint8_t input1, input2, input3, input4, input5, input6, input7, input8, input9;
-    uint8_t key1, key2, key3;
+    uint8_t out[36];
+    uint8_t input[36];
+    uint8_t key[36];
     int cmd_id;
     int temperatur;
     double uid;
@@ -25,6 +25,14 @@ enum change_sts
 	_unchanged
 };
 
+
+enum sts_packet
+{
+    _packet_received_data,
+    _packet_received_config,
+    _packet_wating,
+    _packet_faild
+};
 void init_data_struct_value(data_iot* data_input);
 
 
