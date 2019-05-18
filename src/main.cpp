@@ -77,30 +77,7 @@ void loop()
 			
 			if(handler_wifi(&data_iot_current, &data_iot_received) == _changed)
 			{
-				//relay_control_total(0x06, 0x10);	
-				
-				int retry = 0;
-				uint8_t relay_data_register;
-				relay_data_register = convert_sts_relay_to_reg_modbus(data_iot_received);
-				while (1)
-				{
-					if(relay_control_total(relay_data_register, 0x10) == PROCESS_OK)
-					{
-						for(int ctr = 0; ctr < 8; ctr++)
-							data_iot_current.out[ctr] = data_iot_received.out[ctr];
-						break;
-					}
-					else
-					{
-						if (retry > RETRY_NUM)
-						{
-							delay(1000);
-							break;
-						}
-						retry++;
-						delay(200);
-					}
-				}
+				handler_modbus(&data_iot_current, &data_iot_received, 1);
 				send_data_to_server(data_iot_current, _json_response);
 			}
 			if(++ctr_timer_check_input > 4)

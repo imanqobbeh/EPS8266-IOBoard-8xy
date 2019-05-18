@@ -249,7 +249,30 @@ change_sts handler_modbus(data_iot* _data_iot_current, data_iot* _data_iot_new, 
 
 	if(handl_mode == 1)
 	{
-		
+		int retry = 0;
+		uint8_t relay_data_register;
+		for(int ctr = 0; ctr < 8; ctr++)
+			tmp_data_iot.out[ctr] = _data_iot_new->out[ctr];
+		relay_data_register = convert_sts_relay_to_reg_modbus(tmp_data_iot);
+		while (1)
+		{
+			if(relay_control_total(relay_data_register, 0x10) == PROCESS_OK)
+			{
+				for(int ctr = 0; ctr < 8; ctr++)
+					_data_iot_current->out[ctr] = tmp_data_iot.out[ctr];
+				break;
+			}
+			else
+			{
+				if (retry > RETRY_NUM)
+				{
+					delay(1000);
+					break;
+				}
+				retry++;
+				delay(200);
+			}
+		}
 	}
 	if(handl_mode == 0)
 	{
