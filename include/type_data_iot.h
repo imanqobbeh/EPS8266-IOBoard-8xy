@@ -8,6 +8,43 @@ enum sts_io{
     STS_IO_OFF = 0
 };
 
+
+enum type_contents
+{
+    _type_data,
+    _type_sysconfig,
+    _type_modbus_requset,
+    _type_irda
+};
+
+struct modbus_data
+{
+    uint8_t func_modbus;
+    uint16_t address_register;
+    uint16_t number_of_register;
+    uint16_t a16[100];
+};
+
+struct system_config_data
+{
+    char sts_memory[10];
+    char sip[20];
+    char ssid[30];
+    char pass[30];
+    char uniq_id[15];
+    char pair_config[100];
+    char cip[20];
+    char gatway[20];
+    char subnet[20];
+    char dns1[20];
+    char dns2[20];
+    char dhcp[10];
+    char port_udp[10];
+    char ssid_2[30];
+    char pass_2[30];
+    char key_3des[120];
+};
+
 struct data_iot
 {
     /* data */
@@ -17,6 +54,8 @@ struct data_iot
     int cmd_id;
     int temperatur;
     double uid;
+    type_contents _type_contents;
+    char a8[100];
 };
 
 enum change_sts
