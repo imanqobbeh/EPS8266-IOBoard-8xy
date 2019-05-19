@@ -79,14 +79,15 @@ void loop()
 			if(sts == 0)		// this state accur Ones after exit from disconnect state to connect state .
 			{
 				udp_start();
-				send_data_to_server(&data_iot_current, _json_alive);
+				send_data_to_server(&
+				data_iot_current, _json_alive);
 				ctr_timer_send_imalive = 0;
 				sts = 1;
 			}
 			
 			if(handler_wifi(&data_iot_current, &data_iot_received) == _changed)
 			{
-				switch(data_iot_current.type_contents)
+				switch(data_iot_received.type_contents)
 				{
 					case _type_data:
 						handler_modbus(&data_iot_current, &data_iot_received, 1);

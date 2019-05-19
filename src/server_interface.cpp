@@ -43,7 +43,7 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 {
 	change_sts _change_sts = _unchanged;
 	data_iot tmp_data_iot;
-	
+	_data_iot_output->type_contents = _type_empty;
 	for(int ctr = 0; ctr <= 7; ctr++)
 		_data_iot_output->out[ctr] = _data_iot_input->out[ctr];
 	
@@ -69,6 +69,7 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 
 				if(root.containsKey("data"))
 				{
+					_data_iot_output->type_contents = _type_data;
 					JsonObject& root2 = root["data"];
 					char str_tmp[10];
 					for(int ctr = 0; ctr < 8; ctr++)
