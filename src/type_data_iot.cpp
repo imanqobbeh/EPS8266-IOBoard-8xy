@@ -2,6 +2,7 @@
 
 void init_data_struct_value(data_iot* data_input)
 {
+	data_input->type_contents = _type_empty;
 	data_input->uid = get_uid();
 	for(int ctr = 0; ctr < 8; ctr++)
 		data_input->out[ctr] = STS_IO_OFF;

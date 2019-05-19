@@ -4,6 +4,10 @@
 // ------------------------------------------------------------------------------------------------------
 
 data_iot data_iot_current, data_iot_received;
+system_config_data_struct system_config_data;
+modbus_data_struct modbus_data;
+irda_data_struct irda_data;
+
 sts_led _sts_led = _led_off;
 
 void setup()
@@ -11,6 +15,11 @@ void setup()
 	init_digital_io();
 	init_uart();
 	init_data_struct_value(&data_iot_current);
+
+	data_iot_current.irda_data = &irda_data;
+	data_iot_current.system_config_data = &system_config_data;
+	data_iot_current.modbus_data = &modbus_data;
+
 	led_blinker(_led_off);
 	_sts_led = _led_off;
 }
@@ -77,9 +86,21 @@ void loop()
 			
 			if(handler_wifi(&data_iot_current, &data_iot_received) == _changed)
 			{
-				handler_modbus(&data_iot_current, &data_iot_received, 1);
-				send_data_to_server(data_iot_current, _json_response);
+				switch(data_iot_current.type_contents)
+				{
+					case _type_data:
+						handler_modbus(&data_iot_current, &data_iot_received, 1);
+						send_data_to_server(data_iot_current, _json_response);
+						break;
+					case _type_sysconfig:
+						break;
+					case _type_modbus_requset:
+						break;
+					case _type_irda:
+						break;
+				}
 			}
+
 			if(++ctr_timer_check_input > 4)
 			{
 				ctr_timer_check_input = 0;

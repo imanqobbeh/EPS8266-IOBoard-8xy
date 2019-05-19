@@ -13,7 +13,8 @@ enum type_contents
     _type_data,
     _type_sysconfig,
     _type_modbus_requset,
-    _type_irda
+    _type_irda,
+    _type_empty
 };
 
 struct modbus_data_struct
@@ -62,6 +63,7 @@ struct data_iot
     uint8_t type_contents;
     system_config_data_struct* system_config_data;
     modbus_data_struct* modbus_data;
+    irda_data_struct* irda_data;
 };
 
 enum change_sts
@@ -78,6 +80,7 @@ enum sts_packet
     _packet_wating,
     _packet_faild
 };
+
 void init_data_struct_value(data_iot* data_input);
 
 
