@@ -79,6 +79,27 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 							_data_iot_output->out[ctr] = root["data"][str_tmp];
 					}
 				}
+				
+				if(root.containsKey("sys_config"))
+				{
+					_data_iot_output->type_contents = _type_sysconfig;
+   					JsonObject& root2 = root["sys_config"];
+   					
+					system_config_data_struct* ptr_system_config;
+					ptr_system_config = _data_iot_input->system_config_data;
+					
+					if(root2.containsKey("ssid"))
+					{
+						String tmp_ssid = root2["ssid"];
+						tmp_ssid.toCharArray(ptr_system_config->ssid,30);
+					}
+					if(root2.containsKey("pass"))
+					{
+						String tmp_pass = root2["pass"];  
+						tmp_pass.toCharArray(ptr_system_config->pass,30);
+					}
+					
+				}
 			}
 		}
 	}
@@ -102,29 +123,42 @@ void json_packet_builder(char *str_out, data_iot* _data_input, json_builder_mode
 	sprintf(str_out + strlen(str_out), ",\"model\":\"IO8A-01\"");
 	sprintf(str_out + strlen(str_out), ",\"ver\":\"esp-8xy v2.0\"");
 
-	switch(_Builder_mode)
+	if((_Builder_mode == _json_response) || (_Builder_mode == _json_sts_change) || (_Builder_mode == _json_alive))
 	{
-		case _json_response:
-			sprintf(str_out + strlen(str_out), ",\"type\":\"reply\",\"cmdid\":%d", _data_input->cmd_id);
-			break;
-		case _json_sts_change:
-			sprintf(str_out + strlen(str_out), ",\"type\":\"stchng\"");
-			break;
-		case _json_alive:
-			sprintf(str_out + strlen(str_out), ",\"type\":\"imalive\"");
-			break;
+		switch(_Builder_mode)
+		{
+			case _json_response:
+				sprintf(str_out + strlen(str_out), ",\"type\":\"reply\",\"cmdid\":%d", _data_input->cmd_id);
+				break;
+			case _json_sts_change:
+				sprintf(str_out + strlen(str_out), ",\"type\":\"stchng\"");
+				break;
+			case _json_alive:
+				sprintf(str_out + strlen(str_out), ",\"type\":\"imalive\"");
+				break;
+		}
+
+		sprintf(str_out + strlen(str_out), ",\"data\":{");
+
+		for(int ctr = 0; ctr < 8; ctr++)
+			sprintf(str_out + strlen(str_out), "\"o%d\":%d,", ctr + 1,_data_input->out[ctr]);
+
+		for(int ctr = 0; ctr < 8; ctr++)
+			sprintf(str_out + strlen(str_out), "\"i%d\":%d,", ctr + 1,_data_input->input[ctr]);
+
+		sprintf(str_out + strlen(str_out), "\"k1\":%d",_data_input->key[0]);
+
+		sprintf(str_out + strlen(str_out), "}}");
 	}
+	else if(_Builder_mode == _json_system_conf)
+	{
+		system_config_data_struct* ptr_system_config;
+		ptr_system_config = _data_input->system_config_data;
 
-	sprintf(str_out + strlen(str_out), ",\"data\":{");
-
-	for(int ctr = 0; ctr < 8; ctr++)
-		sprintf(str_out + strlen(str_out), "\"o%d\":%d,", ctr + 1,_data_input->out[ctr]);
-
-	for(int ctr = 0; ctr < 8; ctr++)
-		sprintf(str_out + strlen(str_out), "\"i%d\":%d,", ctr + 1,_data_input->input[ctr]);
-
-	sprintf(str_out + strlen(str_out), "\"k1\":%d",_data_input->key[0]);
-
-	sprintf(str_out + strlen(str_out), "}}");
+		sprintf(str_out + strlen(str_out), ",\"type\":\"reply\",\"cmdid\":%d", _data_input->cmd_id);
+		sprintf(str_out + strlen(str_out), ",\"sys_config\":{");
+		sprintf(str_out + strlen(str_out), "\"ssid\":%s,\"pass\":%s", ptr_system_config->ssid, ptr_system_config->pass);
+		sprintf(str_out + strlen(str_out), "}}");
+	}
 }
 //WiFi.macAddress(mac);

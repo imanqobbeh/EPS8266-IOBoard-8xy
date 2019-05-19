@@ -31,7 +31,8 @@ enum json_builder_mode
 {
 	_json_response,
 	_json_sts_change,
-	_json_alive
+	_json_alive,
+	_json_system_conf
 };
 
 #define NUM_OF_RETRY_TO_CONNECT_WIFI		2

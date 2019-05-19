@@ -94,6 +94,7 @@ void loop()
 						send_data_to_server(&data_iot_current, _json_response);
 						break;
 					case _type_sysconfig:
+						send_data_to_server(&data_iot_current, _json_system_conf);
 						break;
 					case _type_modbus_requset:
 						break;
