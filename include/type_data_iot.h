@@ -8,7 +8,6 @@ enum sts_io{
     STS_IO_OFF = 0
 };
 
-
 enum type_contents
 {
     _type_data,
@@ -17,7 +16,7 @@ enum type_contents
     _type_irda
 };
 
-struct modbus_data
+struct modbus_data_struct
 {
     uint8_t func_modbus;
     uint16_t address_register;
@@ -25,7 +24,13 @@ struct modbus_data
     uint16_t a16[100];
 };
 
-struct system_config_data
+struct irda_data_struct
+{
+    int ir_cmdid;
+    char a8[100];
+};
+
+struct system_config_data_struct
 {
     char sts_memory[10];
     char sip[20];
@@ -54,8 +59,9 @@ struct data_iot
     int cmd_id;
     int temperatur;
     double uid;
-    type_contents _type_contents;
-    char a8[100];
+    uint8_t type_contents;
+    system_config_data_struct* system_config_data;
+    modbus_data_struct* modbus_data;
 };
 
 enum change_sts
