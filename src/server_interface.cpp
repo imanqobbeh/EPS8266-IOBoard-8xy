@@ -85,26 +85,26 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 	return _change_sts;
 }
 
-void send_data_to_server(data_iot _data_input, json_builder_mode _Builder_mode)
+void send_data_to_server(data_iot* _data_input, json_builder_mode _Builder_mode)
 {
 	char packet_for_send[256];
 	json_packet_builder(packet_for_send, _data_input, _Builder_mode);
 	send_packet_udp(packet_for_send);
 }
 
-void json_packet_builder(char *str_out, data_iot _data_input, json_builder_mode _Builder_mode)
+void json_packet_builder(char *str_out, data_iot* _data_input, json_builder_mode _Builder_mode)
 {
 	memset(str_out, 0, 255);
 
 	sprintf(str_out, "{");
-	sprintf(str_out + strlen(str_out), "\"id\":%.0f",_data_input.uid);
+	sprintf(str_out + strlen(str_out), "\"id\":%.0f",_data_input->uid);
 	sprintf(str_out + strlen(str_out), ",\"model\":\"IO8A-01\"");
 	sprintf(str_out + strlen(str_out), ",\"ver\":\"esp-8xy v2.0\"");
 
 	switch(_Builder_mode)
 	{
 		case _json_response:
-			sprintf(str_out + strlen(str_out), ",\"type\":\"reply\",\"cmdid\":%d", _data_input.cmd_id);
+			sprintf(str_out + strlen(str_out), ",\"type\":\"reply\",\"cmdid\":%d", _data_input->cmd_id);
 			break;
 		case _json_sts_change:
 			sprintf(str_out + strlen(str_out), ",\"type\":\"stchng\"");
@@ -117,12 +117,12 @@ void json_packet_builder(char *str_out, data_iot _data_input, json_builder_mode 
 	sprintf(str_out + strlen(str_out), ",\"data\":{");
 
 	for(int ctr = 0; ctr < 8; ctr++)
-		sprintf(str_out + strlen(str_out), "\"o%d\":%d,", ctr + 1,_data_input.out[ctr]);
+		sprintf(str_out + strlen(str_out), "\"o%d\":%d,", ctr + 1,_data_input->out[ctr]);
 
 	for(int ctr = 0; ctr < 8; ctr++)
-		sprintf(str_out + strlen(str_out), "\"i%d\":%d,", ctr + 1,_data_input.input[ctr]);
+		sprintf(str_out + strlen(str_out), "\"i%d\":%d,", ctr + 1,_data_input->input[ctr]);
 
-	sprintf(str_out + strlen(str_out), "\"k1\":%d",_data_input.key[0]);
+	sprintf(str_out + strlen(str_out), "\"k1\":%d",_data_input->key[0]);
 
 	sprintf(str_out + strlen(str_out), "}}");
 }

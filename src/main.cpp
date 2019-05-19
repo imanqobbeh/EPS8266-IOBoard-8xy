@@ -79,7 +79,7 @@ void loop()
 			if(sts == 0)		// this state accur Ones after exit from disconnect state to connect state .
 			{
 				udp_start();
-				send_data_to_server(data_iot_current, _json_alive);
+				send_data_to_server(&data_iot_current, _json_alive);
 				ctr_timer_send_imalive = 0;
 				sts = 1;
 			}
@@ -90,7 +90,7 @@ void loop()
 				{
 					case _type_data:
 						handler_modbus(&data_iot_current, &data_iot_received, 1);
-						send_data_to_server(data_iot_current, _json_response);
+						send_data_to_server(&data_iot_current, _json_response);
 						break;
 					case _type_sysconfig:
 						break;
@@ -105,13 +105,13 @@ void loop()
 			{
 				ctr_timer_check_input = 0;
 				if(handler_modbus(&data_iot_current, &data_iot_received, 0) == _changed)
-					send_data_to_server(data_iot_current, _json_sts_change);
+					send_data_to_server(&data_iot_current, _json_sts_change);
 			}
 
 			if(++ctr_timer_send_imalive > 400)
 			{
 				ctr_timer_send_imalive = 0;
-				send_data_to_server(data_iot_current, _json_alive);
+				send_data_to_server(&data_iot_current, _json_alive);
 			}
 			
 			delay(50);
