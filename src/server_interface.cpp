@@ -98,7 +98,6 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 						String tmp_pass = root2["pass"];  
 						tmp_pass.toCharArray(ptr_system_config->pass,30);
 					}
-					
 				}
 			}
 		}
@@ -157,7 +156,7 @@ void json_packet_builder(char *str_out, data_iot* _data_input, json_builder_mode
 
 		sprintf(str_out + strlen(str_out), ",\"type\":\"reply\",\"cmdid\":%d", _data_input->cmd_id);
 		sprintf(str_out + strlen(str_out), ",\"sys_config\":{");
-		sprintf(str_out + strlen(str_out), "\"ssid\":%s,\"pass\":%s", ptr_system_config->ssid, ptr_system_config->pass);
+		sprintf(str_out + strlen(str_out), "\"ssid\":\"%s\",\"pass\":\"%s\"", ptr_system_config->ssid, ptr_system_config->pass);
 		sprintf(str_out + strlen(str_out), "}}");
 	}
 }

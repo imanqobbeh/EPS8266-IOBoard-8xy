@@ -25,9 +25,14 @@
 #define _key_3des       375            // start address 365 - len 120   
 //};
 
+enum init_memory_mode
+{
+    _reset_factory,
+    _check_inited
+};
 
 void read_data_memory(char* str_out, int _key_value);
 void write_data_memory(char* str_in, int _key_value);
-void init_memory(void);
+void init_memory(init_memory_mode _sts_init_memory);
 
 #endif

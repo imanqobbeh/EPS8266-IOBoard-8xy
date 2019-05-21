@@ -26,7 +26,8 @@ enum wifi_num{
 	_wifi_num_3_alter_run
 };
 
-void init_wifi(wifi_num _wifi_num);
+
+void init_wifi(wifi_num _wifi_num, data_iot* _data_input);
 sts_wifi check_sts_wifi(void);
 
 void init_digital_io(void);

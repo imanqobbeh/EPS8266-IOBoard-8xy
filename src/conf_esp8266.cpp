@@ -1,29 +1,23 @@
 #include "conf_esp8266.h"
 
-
-char ssid1_run[30] = "ovio";
-char password1_run[30] = "40800930912";
-
-const char *ssid2_setup = "Netware2";
+const char *ssid2_setup = "ovio";
 const char *password2_setup = "40800930912";
 
-char ssid3_alter_run[30] = "ovio";
-char password_alter_run[30] = "testpass";
-
-
-void init_wifi(wifi_num _wifi_num)
+void init_wifi(wifi_num _wifi_num, data_iot* _data_input)
 {
-	WiFi.hostname("Ovio Shatoonbala" );
+	system_config_data_struct* _system_config_data;
+	_system_config_data = _data_input->system_config_data;
+	WiFi.hostname("Ovio Shatoonbala");
 	switch(_wifi_num)
 	{
 		case _wifi_num_1_run:
-			WiFi.begin(ssid1_run, password1_run);
+			WiFi.begin(_system_config_data->ssid, _system_config_data->pass);
 			break;
 		case _wifi_num_2_setup:
 			WiFi.begin(ssid2_setup, password2_setup);
 			break;
 		case _wifi_num_3_alter_run:
-			WiFi.begin(ssid3_alter_run, password_alter_run);
+			WiFi.begin(_system_config_data->ssid_2, _system_config_data->pass_2);
 			break;
 	}
 }

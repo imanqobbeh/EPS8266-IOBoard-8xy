@@ -13,12 +13,21 @@ sts_led _sts_led = _led_off;
 void setup()
 {
 	init_digital_io();
+	init_memory(_check_inited);
 	init_uart();
 	init_data_struct_value(&data_iot_current);
 
 	data_iot_current.irda_data = &irda_data;
 	data_iot_current.system_config_data = &system_config_data;
 	data_iot_current.modbus_data = &modbus_data;
+
+    system_config_data_struct* _system_config_data = data_iot_current.system_config_data; 
+
+
+	read_data_memory(_system_config_data->ssid, _ssid);
+	//sprintf(_system_config_data->ssid, "ovio"); //%s",str_tmp);
+	read_data_memory(_system_config_data->pass, _pass);
+	//sprintf(_system_config_data->pass, "40800930912");//%s",str_tmp);
 
 	led_blinker(_led_off);
 	_sts_led = _led_off;
@@ -27,7 +36,7 @@ void setup()
 void loop()
 {
 	int ctrled = 0;
-	
+	int ctr_setup_key = 0;
 	int retry_connect = 0, sts = 0;
 	int ctr_timer_send_imalive = 0, ctr_timer_check_input = 0;
 	int ctr_go_to_pair = 0;
@@ -45,7 +54,7 @@ void loop()
 			
 			if(++retry_connect > DEF_RETRY_CONNECT_WIFI)
 			{
-				init_wifi(_wifi_num_1_run);
+				init_wifi(_wifi_num_1_run, &data_iot_current);
 				retry_connect = 0;
 			}
 			
@@ -57,7 +66,6 @@ void loop()
 					handler_modbus(&data_iot_current, &data_iot_received, 0);
 				}
 			}
-			delay(50);
 		}
 		else
 		{
@@ -79,14 +87,14 @@ void loop()
 			if(sts == 0)		// this state accur Ones after exit from disconnect state to connect state .
 			{
 				udp_start();
-				send_data_to_server(&
-				data_iot_current, _json_alive);
+				send_data_to_server(&data_iot_current, _json_alive);
 				ctr_timer_send_imalive = 0;
 				sts = 1;
 			}
 			
 			if(handler_wifi(&data_iot_current, &data_iot_received) == _changed)
 			{
+				system_config_data_struct* _system_config_data = data_iot_current.system_config_data; 
 				switch(data_iot_received.type_contents)
 				{
 					case _type_data:
@@ -94,7 +102,16 @@ void loop()
 						send_data_to_server(&data_iot_current, _json_response);
 						break;
 					case _type_sysconfig:
+						char str_tmp[30];
+						
+						write_data_memory(_system_config_data->ssid, _ssid);
+						//sprintf(_system_config_data->ssid, "%d", str_tmp);
+						write_data_memory(_system_config_data->pass, _pass);
+						//sprintf(_system_config_data->pass, "%d", str_tmp);
+
 						send_data_to_server(&data_iot_current, _json_system_conf);
+						delay(500);
+						WiFi.disconnect(true);
 						break;
 					case _type_modbus_requset:
 						break;
@@ -115,9 +132,22 @@ void loop()
 				ctr_timer_send_imalive = 0;
 				send_data_to_server(&data_iot_current, _json_alive);
 			}
-			
-			delay(50);
 		}
+
+		if(data_iot_current.key[0] == 1)
+		{
+			if(++ctr_setup_key > 50)
+			{
+				system_config_data_struct* _system_config_data = data_iot_current.system_config_data; 
+				sprintf(_system_config_data->ssid, "%s", "Netware2");
+				sprintf(_system_config_data->pass, "%S", "40800930912");
+				WiFi.disconnect(true);
+			}
+		}
+		else
+			ctr_setup_key = 0;
+
+		delay(50);
 	}
 }
 

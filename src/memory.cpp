@@ -32,7 +32,7 @@ void write_data_memory(char* str_in, int _key_value)
     EEPROM.commit();
 }
 
-void init_memory(void)
+void init_memory(init_memory_mode _sts_init_memory)
 {
     char sts_eep_ary_tmp[10];
     int ctr = 0;
@@ -44,11 +44,12 @@ void init_memory(void)
         for(int ctr = 0; ctr < 7; ctr++)
             sts_eep_ary_tmp[ctr] = EEPROM.read(_sts_memory + ctr);
         sts_eep_ary_tmp[7] = 0;
-        if(strcmp(sts_eep_ary_tmp, "inited"))
+        
+        if(strcmp(sts_eep_ary_tmp, "inited") || (_sts_init_memory == _reset_factory))
         {
             write_data_memory("inited", _sts_memory);
             write_data_memory("192.168.1.255", _sip);
-            write_data_memory("Netware2", _ssid);
+            write_data_memory("Netware", _ssid);
             write_data_memory("40800930912", _pass);
             write_data_memory("free", _uniq_id);
             write_data_memory("free", _pair_config);
