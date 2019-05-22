@@ -49,7 +49,7 @@ void init_memory(init_memory_mode _sts_init_memory)
         {
             write_data_memory("inited", _sts_memory);
             write_data_memory("192.168.1.255", _sip);
-            write_data_memory("Netware", _ssid);
+            write_data_memory("ovio", _ssid);
             write_data_memory("40800930912", _pass);
             write_data_memory("free", _uniq_id);
             write_data_memory("free", _pair_config);

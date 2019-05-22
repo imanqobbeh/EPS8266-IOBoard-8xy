@@ -1,6 +1,6 @@
 #include "conf_esp8266.h"
 
-const char *ssid2_setup = "ovio";
+const char *ssid2_setup = "Netware2";
 const char *password2_setup = "40800930912";
 
 void init_wifi(wifi_num _wifi_num, data_iot* _data_input)

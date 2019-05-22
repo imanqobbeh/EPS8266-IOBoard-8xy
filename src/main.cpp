@@ -25,36 +25,116 @@ void setup()
 
 
 	read_data_memory(_system_config_data->ssid, _ssid);
-	//sprintf(_system_config_data->ssid, "ovio"); //%s",str_tmp);
 	read_data_memory(_system_config_data->pass, _pass);
-	//sprintf(_system_config_data->pass, "40800930912");//%s",str_tmp);
 
 	led_blinker(_led_off);
 	_sts_led = _led_off;
 }
 
+enum sts_led_handler{
+	_led_setup_handler = 0x01,
+	_led_connnect_handler = 0x02,
+	_led_disconnect_handler = 0x04,
+	_led_run_handler = 0x08
+};
+
+void led_handler(int _sts_led_handler)
+{
+	static int ctr_led = 0;
+	if((_sts_led_handler & _led_disconnect_handler) == _led_disconnect_handler)
+	{
+		if((_sts_led_handler & _led_run_handler)  == _led_run_handler)
+		{
+			_sts_led = _led_off;
+			led_blinker(_led_off);
+		}
+		else if((_sts_led_handler & _led_setup_handler) == _led_setup_handler)
+		{
+//			if(++ctr_led > 1)
+//			{
+//				ctr_led = 0;
+				if(_sts_led == _led_off)
+				{
+					_sts_led = _led_on;
+					led_blinker(_led_on);
+				}
+				else
+				{
+					_sts_led = _led_off;
+					led_blinker(_led_off);
+				}
+//			}
+		}
+	}
+	else if((_sts_led_handler & _led_connnect_handler) == _led_connnect_handler)
+	{
+		if((_sts_led_handler & _led_run_handler)  == _led_run_handler)
+		{
+			if(++ctr_led > 6)
+			{
+				ctr_led = 0;
+				if(_sts_led == _led_off)
+				{
+					_sts_led = _led_on;
+					led_blinker(_led_on);
+				}
+				else
+				{
+					_sts_led = _led_off;
+					led_blinker(_led_off);
+				}
+			}			
+		}
+		else if((_sts_led_handler & _led_setup_handler) == _led_setup_handler)
+		{
+			_sts_led = _led_on;
+			led_blinker(_led_on);
+		}
+	}
+}
+
 void loop()
 {
-	int ctrled = 0;
-	int ctr_setup_key = 0;
+	int _led_handler = (_led_disconnect_handler | _led_run_handler);
+	int ctrled = 0, led_freq = 6;
+	int ctr_setup_key = 0, setup_status = 0;
 	int retry_connect = 0, sts = 0;
 	int ctr_timer_send_imalive = 0, ctr_timer_check_input = 0;
 	int ctr_go_to_pair = 0;
 	int pair_condition = 1;
-	
+
+
 	while(1)
 	{
 		if(check_sts_wifi() == _sts_wifi_disconnected)	
 		{
 			if(sts == 1)
-			{
-				led_blinker(_led_off);
 				sts = 0;
+
+			if(setup_status == 0)
+				int _led_handler = (_led_disconnect_handler | _led_run_handler);	
+
+			if(setup_status == 3)
+			{
+				setup_status = 0;
+				int _led_handler = (_led_disconnect_handler | _led_run_handler);
 			}
+			if(setup_status == 1)
+			{
+				setup_status = 2;
+				_led_handler = (_led_disconnect_handler | _led_setup_handler);
+			}
+
+			led_handler(_led_handler);
 			
+
 			if(++retry_connect > DEF_RETRY_CONNECT_WIFI)
 			{
-				init_wifi(_wifi_num_1_run, &data_iot_current);
+				if(setup_status == 2)
+					init_wifi(_wifi_num_2_setup, &data_iot_current);
+				else
+					init_wifi(_wifi_num_1_run, &data_iot_current);
+				
 				retry_connect = 0;
 			}
 			
@@ -69,21 +149,17 @@ void loop()
 		}
 		else
 		{
-			if(++ctrled > 6)	// Blinker 
+			if(setup_status == 2)
 			{
-				ctrled = 0;
-				if(_sts_led == _led_on)
-				{
-					led_blinker(_led_off);
-					_sts_led = _led_off;
-				}
-				else
-				{
-					led_blinker(_led_on);
-					_sts_led = _led_on;
-				}
+				setup_status = 3;
+				_led_handler = (_led_connnect_handler | _led_setup_handler);
 			}
-			
+			else if(setup_status == 0)
+				_led_handler = (_led_connnect_handler | _led_run_handler);
+	
+
+			led_handler(_led_handler);
+
 			if(sts == 0)		// this state accur Ones after exit from disconnect state to connect state .
 			{
 				udp_start();
@@ -105,9 +181,7 @@ void loop()
 						char str_tmp[30];
 						
 						write_data_memory(_system_config_data->ssid, _ssid);
-						//sprintf(_system_config_data->ssid, "%d", str_tmp);
 						write_data_memory(_system_config_data->pass, _pass);
-						//sprintf(_system_config_data->pass, "%d", str_tmp);
 
 						send_data_to_server(&data_iot_current, _json_system_conf);
 						delay(500);
@@ -134,14 +208,22 @@ void loop()
 			}
 		}
 
+		
 		if(data_iot_current.key[0] == 1)
 		{
-			if(++ctr_setup_key > 50)
+			if(++ctr_setup_key > 60)
 			{
-				system_config_data_struct* _system_config_data = data_iot_current.system_config_data; 
-				sprintf(_system_config_data->ssid, "%s", "Netware2");
-				sprintf(_system_config_data->pass, "%S", "40800930912");
+				_sts_led = _led_off;
+				led_blinker(_led_off);	
+				delay(2000);
+				ctr_setup_key = 0;
+				if(setup_status == 0)
+					setup_status = 1;
+				else
+					setup_status = 0;
+				
 				WiFi.disconnect(true);
+				delay(500);
 			}
 		}
 		else
