@@ -50,9 +50,6 @@ void led_handler(int _sts_led_handler)
 		}
 		else if((_sts_led_handler & _led_setup_handler) == _led_setup_handler)
 		{
-//			if(++ctr_led > 1)
-//			{
-//				ctr_led = 0;
 				if(_sts_led == _led_off)
 				{
 					_sts_led = _led_on;
@@ -63,12 +60,16 @@ void led_handler(int _sts_led_handler)
 					_sts_led = _led_off;
 					led_blinker(_led_off);
 				}
-//			}
 		}
 	}
 	else if((_sts_led_handler & _led_connnect_handler) == _led_connnect_handler)
 	{
 		if((_sts_led_handler & _led_run_handler)  == _led_run_handler)
+		{
+			_sts_led = _led_on;
+			led_blinker(_led_on);		
+		}
+		else if((_sts_led_handler & _led_setup_handler) == _led_setup_handler)
 		{
 			if(++ctr_led > 6)
 			{
@@ -83,12 +84,7 @@ void led_handler(int _sts_led_handler)
 					_sts_led = _led_off;
 					led_blinker(_led_off);
 				}
-			}			
-		}
-		else if((_sts_led_handler & _led_setup_handler) == _led_setup_handler)
-		{
-			_sts_led = _led_on;
-			led_blinker(_led_on);
+			}	
 		}
 	}
 }
@@ -97,7 +93,7 @@ void loop()
 {
 	int _led_handler = (_led_disconnect_handler | _led_run_handler);
 	int ctrled = 0, led_freq = 6;
-	int ctr_setup_key = 0, setup_status = 0;
+	int ctr_setup_key = 0, setup_status = 0, ctr_stay_in_setup = 0;
 	int retry_connect = 0, sts = 0;
 	int ctr_timer_send_imalive = 0, ctr_timer_check_input = 0;
 	int ctr_go_to_pair = 0;
@@ -127,7 +123,6 @@ void loop()
 
 			led_handler(_led_handler);
 			
-
 			if(++retry_connect > DEF_RETRY_CONNECT_WIFI)
 			{
 				if(setup_status == 2)
@@ -184,8 +179,13 @@ void loop()
 						write_data_memory(_system_config_data->pass, _pass);
 
 						send_data_to_server(&data_iot_current, _json_system_conf);
+						_sts_led = _led_off;
+						led_blinker(_led_off);
+						setup_status = 0;
+						_led_handler = (_led_disconnect_handler | _led_run_handler);	
 						delay(500);
-						WiFi.disconnect(true);
+						while(WL_CONNECTED == WiFi.disconnect(true))
+							delay(500);
 						break;
 					case _type_modbus_requset:
 						break;
@@ -209,26 +209,40 @@ void loop()
 		}
 
 		
-		if(data_iot_current.key[0] == 1)
+		if((data_iot_current.key[0] == 1) && (setup_status == 0))
 		{
 			if(++ctr_setup_key > 60)
 			{
 				_sts_led = _led_off;
 				led_blinker(_led_off);	
 				delay(2000);
+
 				ctr_setup_key = 0;
+
 				if(setup_status == 0)
 					setup_status = 1;
-				else
-					setup_status = 0;
-				
-				WiFi.disconnect(true);
-				delay(500);
+
+				while(WL_CONNECTED == WiFi.disconnect(true))
+					delay(500);
 			}
 		}
 		else
 			ctr_setup_key = 0;
 
+		if(setup_status != 0)
+		{
+			if(++ctr_stay_in_setup > 5000)
+			{
+				_sts_led = _led_off;
+				led_blinker(_led_off);	
+				setup_status = 0;
+				WiFi.disconnect(true);
+				delay(500);
+			}
+		}
+		else
+			ctr_stay_in_setup = 0;
+		
 		delay(50);
 	}
 }

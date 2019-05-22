@@ -154,7 +154,7 @@ void json_packet_builder(char *str_out, data_iot* _data_input, json_builder_mode
 		system_config_data_struct* ptr_system_config;
 		ptr_system_config = _data_input->system_config_data;
 
-		sprintf(str_out + strlen(str_out), ",\"type\":\"reply\",\"cmdid\":%d", _data_input->cmd_id);
+		sprintf(str_out + strlen(str_out), ",\"type\":\"confreply\",\"cmdid\":%d", _data_input->cmd_id);
 		sprintf(str_out + strlen(str_out), ",\"sys_config\":{");
 		sprintf(str_out + strlen(str_out), "\"ssid\":\"%s\",\"pass\":\"%s\"", ptr_system_config->ssid, ptr_system_config->pass);
 		sprintf(str_out + strlen(str_out), "}}");
