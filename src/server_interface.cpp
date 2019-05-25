@@ -98,6 +98,26 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 						String tmp_pass = root2["pass"];  
 						tmp_pass.toCharArray(ptr_system_config->pass,30);
 					}
+					if(root2.containsKey("sip"))
+					{
+
+					}
+				}
+
+				if(root.containsKey("pair_config"))
+				{
+					/*
+					_data_iot_output->type_contents = _type_sysconfig;
+   					JsonObject& root2 = root["sys_config"];
+					char str_tmp[10];
+					
+					for(int ctr = 0; ctr < 8; ctr++)
+					{
+						sprintf(str_tmp, "i%d", ctr + 1);
+						if(root2.containsKey(str_tmp))
+							_data_iot_output->out[ctr] = root["pair_config"][str_tmp];
+					}	
+					*/	
 				}
 			}
 		}

@@ -10,6 +10,7 @@
 #include <ESP8266mDNS.h>
 #include <ArduinoJson.h>
 #include <stdint.h>
+#include <MQTT.h>
 
 #include "type_data_iot.h"
 #include "conf_esp8266.h"

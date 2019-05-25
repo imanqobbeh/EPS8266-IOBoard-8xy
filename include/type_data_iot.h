@@ -51,6 +51,7 @@ struct system_config_data_struct
     char key_3des[120];
 };
 
+
 struct data_iot
 {
     /* data */
