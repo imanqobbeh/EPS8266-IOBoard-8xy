@@ -100,14 +100,14 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 					}
 					if(root2.containsKey("sip"))
 					{
-
+						
 					}
 				}
 
 				if(root.containsKey("pair_config"))
 				{
-					/*
-					_data_iot_output->type_contents = _type_sysconfig;
+					
+					_data_iot_output->type_contents = _pair_config;
    					JsonObject& root2 = root["sys_config"];
 					char str_tmp[10];
 					

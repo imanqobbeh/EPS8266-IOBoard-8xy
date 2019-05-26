@@ -12,6 +12,7 @@ enum type_contents
 {
     _type_data,
     _type_sysconfig,
+    _pair_config,
     _type_modbus_requset,
     _type_irda,
     _type_empty
