@@ -26,6 +26,12 @@ enum wifi_num{
 	_wifi_num_3_alter_run
 };
 
+enum sts_led_handler{
+	_led_setup_handler = 0x01,
+	_led_connnect_handler = 0x02,
+	_led_disconnect_handler = 0x04,
+	_led_run_handler = 0x08
+};
 
 void init_wifi(wifi_num _wifi_num, data_iot* _data_input);
 sts_wifi check_sts_wifi(void);

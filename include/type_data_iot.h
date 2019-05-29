@@ -52,6 +52,11 @@ struct system_config_data_struct
     char key_3des[120];
 };
 
+struct pair_config_data_struct
+{
+    uint8_t pair_type;
+    uint8_t io[36];
+};
 
 struct data_iot
 {
@@ -66,6 +71,7 @@ struct data_iot
     system_config_data_struct* system_config_data;
     modbus_data_struct* modbus_data;
     irda_data_struct* irda_data;
+    pair_config_data_struct* pair_config_data;
 };
 
 enum change_sts

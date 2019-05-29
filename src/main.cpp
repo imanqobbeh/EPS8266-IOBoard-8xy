@@ -5,6 +5,7 @@
 
 data_iot data_iot_current, data_iot_received;
 system_config_data_struct system_config_data;
+pair_config_data_struct pair_config_data;
 modbus_data_struct modbus_data;
 irda_data_struct irda_data;
 
@@ -20,9 +21,10 @@ void setup()
 	data_iot_current.irda_data = &irda_data;
 	data_iot_current.system_config_data = &system_config_data;
 	data_iot_current.modbus_data = &modbus_data;
-
+	data_iot_current.pair_config_data = &pair_config_data;
+	
     system_config_data_struct* _system_config_data = data_iot_current.system_config_data; 
-
+	
 
 	read_data_memory(_system_config_data->ssid, _ssid);
 	read_data_memory(_system_config_data->pass, _pass);
@@ -31,12 +33,6 @@ void setup()
 	_sts_led = _led_off;
 }
 
-enum sts_led_handler{
-	_led_setup_handler = 0x01,
-	_led_connnect_handler = 0x02,
-	_led_disconnect_handler = 0x04,
-	_led_run_handler = 0x08
-};
 
 void led_handler(int _sts_led_handler)
 {
@@ -50,16 +46,16 @@ void led_handler(int _sts_led_handler)
 		}
 		else if((_sts_led_handler & _led_setup_handler) == _led_setup_handler)
 		{
-				if(_sts_led == _led_off)
-				{
-					_sts_led = _led_on;
-					led_blinker(_led_on);
-				}
-				else
-				{
-					_sts_led = _led_off;
-					led_blinker(_led_off);
-				}
+			if(_sts_led == _led_off)
+			{
+				_sts_led = _led_on;
+				led_blinker(_led_on);
+			}
+			else
+			{
+				_sts_led = _led_off;
+				led_blinker(_led_off);
+			}
 		}
 	}
 	else if((_sts_led_handler & _led_connnect_handler) == _led_connnect_handler)
@@ -108,19 +104,20 @@ void loop()
 				sts = 0;
 
 			if(setup_status == 0)
-				int _led_handler = (_led_disconnect_handler | _led_run_handler);	
+				int _led_handler = (_led_disconnect_handler | _led_run_handler);
 
 			if(setup_status == 3)
 			{
 				setup_status = 0;
 				int _led_handler = (_led_disconnect_handler | _led_run_handler);
 			}
+
 			if(setup_status == 1)
 			{
 				setup_status = 2;
 				_led_handler = (_led_disconnect_handler | _led_setup_handler);
 			}
-
+			
 			led_handler(_led_handler);
 			
 			if(++retry_connect > DEF_RETRY_CONNECT_WIFI)
@@ -149,10 +146,10 @@ void loop()
 				setup_status = 3;
 				_led_handler = (_led_connnect_handler | _led_setup_handler);
 			}
+			
 			else if(setup_status == 0)
 				_led_handler = (_led_connnect_handler | _led_run_handler);
-	
-
+			
 			led_handler(_led_handler);
 
 			if(sts == 0)		// this state accur Ones after exit from disconnect state to connect state .
@@ -207,7 +204,6 @@ void loop()
 				send_data_to_server(&data_iot_current, _json_alive);
 			}
 		}
-
 		
 		if((data_iot_current.key[0] == 1) && (setup_status == 0))
 		{
