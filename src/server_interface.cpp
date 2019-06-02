@@ -103,10 +103,11 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 						
 					}
 				}
-
+				
 				if(root.containsKey("pair_config"))
 				{
 					_data_iot_output->type_contents = _pair_config;
+					pair_config_data_struct* ptr_pair_config;
    					JsonObject& root2 = root["pair_config"];
 					char str_tmp[10];
 					
@@ -115,12 +116,12 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 						sprintf(str_tmp, "i%d", ctr + 1);
 						if(root2.containsKey(str_tmp))
 							_data_iot_output->out[ctr] = root["pair_config"][str_tmp];
-					}	
+					}
 				}
 			}
 		}
 	}
-
+git 
 	return _change_sts;
 }
 

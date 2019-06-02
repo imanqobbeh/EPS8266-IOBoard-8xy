@@ -52,10 +52,22 @@ struct system_config_data_struct
     char key_3des[120];
 };
 
+enum pair_active_sts
+{
+    _pair_activate = 1,
+    _pair_deactivate = 0
+};
+
+enum pair_type
+{
+    
+};
+
 struct pair_config_data_struct
 {
-    uint8_t pair_type;
-    uint8_t io[36];
+    uint8_t total_sts;
+    uint8_t type;
+    uint8_t io_sts[36];
 };
 
 struct data_iot
