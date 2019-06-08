@@ -121,7 +121,6 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 			}
 		}
 	}
-git 
 	return _change_sts;
 }
 

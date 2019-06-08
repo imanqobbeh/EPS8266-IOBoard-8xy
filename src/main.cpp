@@ -117,9 +117,9 @@ void loop()
 				setup_status = 2;
 				_led_handler = (_led_disconnect_handler | _led_setup_handler);
 			}
-			
+
 			led_handler(_led_handler);
-			
+
 			if(++retry_connect > DEF_RETRY_CONNECT_WIFI)
 			{
 				if(setup_status == 2)
@@ -129,7 +129,7 @@ void loop()
 				
 				retry_connect = 0;
 			}
-			
+
 			if(pair_condition == 1)
 			{
 				if(++ctr_timer_check_input > 4)
@@ -146,7 +146,7 @@ void loop()
 				setup_status = 3;
 				_led_handler = (_led_connnect_handler | _led_setup_handler);
 			}
-			
+
 			else if(setup_status == 0)
 				_led_handler = (_led_connnect_handler | _led_run_handler);
 			
@@ -179,7 +179,7 @@ void loop()
 						_sts_led = _led_off;
 						led_blinker(_led_off);
 						setup_status = 0;
-						_led_handler = (_led_disconnect_handler | _led_run_handler);	
+						_led_handler = (_led_disconnect_handler | _led_run_handler);
 						delay(500);
 						while(WL_CONNECTED == WiFi.disconnect(true))
 							delay(500);
@@ -197,7 +197,7 @@ void loop()
 				if(handler_modbus(&data_iot_current, &data_iot_received, 0) == _changed)
 					send_data_to_server(&data_iot_current, _json_sts_change);
 			}
-
+			
 			if(++ctr_timer_send_imalive > 400)
 			{
 				ctr_timer_send_imalive = 0;
