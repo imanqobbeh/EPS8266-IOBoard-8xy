@@ -54,20 +54,28 @@ struct system_config_data_struct
 
 enum pair_active_sts
 {
-    _pair_activate = 1,
-    _pair_deactivate = 0
+    _deactivate = '0',
+    _activate = '1'
 };
 
 enum pair_type
 {
-    
+    _push = '0',
+    _toggle = '1'
 };
 
 struct pair_config_data_struct
 {
-    uint8_t total_sts;
-    uint8_t type;
-    uint8_t io_sts[36];
+    char pair_active[12];
+    char pair_type[12];
+    char io1_sts[3];
+    char io2_sts[3];
+    char io3_sts[3];
+    char io4_sts[3];
+    char io5_sts[3];
+    char io6_sts[3];
+    char io7_sts[3];
+    char io8_sts[3];
 };
 
 struct data_iot

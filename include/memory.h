@@ -13,7 +13,16 @@
 #define _ssid           30                  // start address 30 - len 30
 #define _pass           60                  // start address 60 - len 30
 #define _uniq_id        90                  // start address 90 - len 15
-#define _pair_config    105                 // start address 105 - len 40
+#define _pair_type      105                 // start address 105 - len 10
+#define _pair_active    115                 // start address 115 - len 10
+#define _pair_io_1      125                 // start address 125 - len 2
+#define _pair_io_2      127                 // start address 127 - len 2
+#define _pair_io_3      129                 // start address 129 - len 2
+#define _pair_io_4      131                 // start address 131 - len 2
+#define _pair_io_5      133                 // start address 133 - len 2
+#define _pair_io_6      135                 // start address 135 - len 2
+#define _pair_io_7      137                 // start address 137 - len 2
+#define _pair_io_8      139                 // start address 139 - len 2
 #define _cip            145                 // start address 145 - len 20
 #define _gateway        165                 // start address 165 - len 20
 #define _subnet         185                 // start address 185 - len 20

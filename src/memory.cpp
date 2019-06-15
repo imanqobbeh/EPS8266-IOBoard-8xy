@@ -1,5 +1,7 @@
 #include "memory.h"
 
+// joloye rah raftaj writer va reader rooye eeprom be soorate bish az had gerefte shavad ta datayii rooye dataye digar neveshtenashavad
+
 const char* _sts_eep_inited = "inited";
 const char* _sts_eep_free = "free";
 const char* _dhcp_on = "dhcp_on";
@@ -36,11 +38,10 @@ void init_memory(init_memory_mode _sts_init_memory)
 {
     char sts_eep_ary_tmp[10];
     int ctr = 0;
-
+    
     EEPROM.begin(SIZE_OF_EMULATION_EEPROM);
     while(1)
     {
-        
         for(int ctr = 0; ctr < 7; ctr++)
             sts_eep_ary_tmp[ctr] = EEPROM.read(_sts_memory + ctr);
         sts_eep_ary_tmp[7] = 0;
@@ -52,7 +53,18 @@ void init_memory(init_memory_mode _sts_init_memory)
             write_data_memory("ovio", _ssid);
             write_data_memory("40800930912", _pass);
             write_data_memory("free", _uniq_id);
-            write_data_memory("free", _pair_config);
+            // pair ----------------------------------------------------
+            write_data_memory("0", _pair_type);
+            write_data_memory("0", _pair_active);
+            write_data_memory("0", _pair_io_1);
+            write_data_memory("0", _pair_io_2);
+            write_data_memory("0", _pair_io_3);
+            write_data_memory("0", _pair_io_4);
+            write_data_memory("0", _pair_io_5);
+            write_data_memory("0", _pair_io_6);
+            write_data_memory("0", _pair_io_7);
+            write_data_memory("0", _pair_io_8);
+            // --------------------------------------------------------
             write_data_memory("free", _cip);
             write_data_memory("free", _gateway);
             write_data_memory("free", _subnet);
