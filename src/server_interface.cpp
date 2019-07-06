@@ -2,7 +2,7 @@
 #include "header_iot.h"
 
 char ip_server_ovio[16] = "192.168.1.255";
-
+extern system_config_data_struct system_config_data;
 byte mac[6];
 WiFiUDP Udp;
 unsigned int localUdpPort = 6364;					  // local port to listen on
@@ -66,7 +66,7 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 
 				if(root.containsKey("cmdid"))
 					_data_iot_output->cmd_id = root["cmdid"];
-
+				
 				if(root.containsKey("data"))
 				{
 					_data_iot_output->type_contents = _type_data;
@@ -100,7 +100,8 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 					}
 					if(root2.containsKey("sip"))
 					{
-						
+						String tmp_sip = root2["sip"];  
+						tmp_sip.toCharArray(ptr_system_config->sip,20);
 					}
 				}
 				
@@ -139,7 +140,7 @@ void json_packet_builder(char *str_out, data_iot* _data_input, json_builder_mode
 	sprintf(str_out + strlen(str_out), "\"id\":%.0f",_data_input->uid);
 	sprintf(str_out + strlen(str_out), ",\"model\":\"IO8A-01\"");
 	sprintf(str_out + strlen(str_out), ",\"ver\":\"esp-8xy v2.0\"");
-
+	
 	if((_Builder_mode == _json_response) || (_Builder_mode == _json_sts_change) || (_Builder_mode == _json_alive))
 	{
 		switch(_Builder_mode)
@@ -174,7 +175,7 @@ void json_packet_builder(char *str_out, data_iot* _data_input, json_builder_mode
 
 		sprintf(str_out + strlen(str_out), ",\"type\":\"confreply\",\"cmdid\":%d", _data_input->cmd_id);
 		sprintf(str_out + strlen(str_out), ",\"sys_config\":{");
-		sprintf(str_out + strlen(str_out), "\"ssid\":\"%s\",\"pass\":\"%s\"", ptr_system_config->ssid, ptr_system_config->pass);
+		sprintf(str_out + strlen(str_out), "\"ssid\":\"%s\",\"pass\":\"%s\",\"sip\":\"%s\"", ptr_system_config->ssid, ptr_system_config->pass, ptr_system_config->sip);
 		sprintf(str_out + strlen(str_out), "}}");
 	}
 }

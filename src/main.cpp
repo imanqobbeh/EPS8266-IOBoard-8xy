@@ -26,6 +26,7 @@ void setup()
     system_config_data_struct* _system_config_data = data_iot_current.system_config_data;
 	read_data_memory(_system_config_data->ssid, _ssid);
 	read_data_memory(_system_config_data->pass, _pass);
+	read_data_memory(_system_config_data->sip, _sip);
 	
 	// pair read from memory ---------------------------------------------------
 	pair_config_data_struct* _pair_config_data = data_iot_current.pair_config_data;
@@ -41,7 +42,7 @@ void setup()
 	read_data_memory(_pair_config_data->io8_sts, _pair_io_8);
 
 	// -------------------------------------------------------------------------
-
+	
 	/*
 		pair_config_data_struct *_pair_config_tmp = data_input->pair_config_data;
 		_pair_config_tmp->total_sts = _deactivate;
@@ -191,6 +192,7 @@ void loop()
 						system_config_data_struct* _system_config_data = data_iot_current.system_config_data;
 						write_data_memory(_system_config_data->ssid, _ssid);
 						write_data_memory(_system_config_data->pass, _pass);
+						write_data_memory(_system_config_data->sip, _sip);
 						send_data_to_server(&data_iot_current, _json_system_conf);
 						_sts_led = _led_off;
 						led_blinker(_led_off);
@@ -200,13 +202,13 @@ void loop()
 						while(WL_CONNECTED == WiFi.disconnect(true))
 							delay(500);
 						break;
-					case _pair_config:
+					//case _pair_config:
 
-						break;
-					case _type_modbus_requset:
-						break;
-					case _type_irda:
-						break;
+					//	break;
+					//case _type_modbus_requset:
+					//	break;
+					//case _type_irda:
+					//	break;
 				}
 			}
 			
