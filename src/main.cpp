@@ -139,7 +139,7 @@ void loop()
 			}
 			
 			led_handler(_led_handler);
-
+			
 			if(++retry_connect > DEF_RETRY_CONNECT_WIFI)
 			{
 				if(setup_status == 2)
@@ -203,7 +203,6 @@ void loop()
 							delay(500);
 						break;
 					//case _pair_config:
-
 					//	break;
 					//case _type_modbus_requset:
 					//	break;
