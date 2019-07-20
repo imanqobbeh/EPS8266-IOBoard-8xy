@@ -31,10 +31,15 @@ sts_packet_udp get_packet_udp(char *str)
 	else
 		return _sts_packet_faild;
 }
-
-void send_packet_udp(char *str)
+ 
+void send_packet_udp(char *str, data_iot* _data_iot_input)
 {
-	Udp.beginPacket(ip_server_ovio, localUdpPort);
+	system_config_data_struct* _system_config_data = _data_iot_input->system_config_data;
+	int digit_port_udp = 0;
+	char *str_tmp = _system_config_data->port_udp;
+	sscanf(str_tmp, "%d", &digit_port_udp);
+	// Udp.beginPacket(ip_server_ovio, localUdpPort);
+	Udp.beginPacket(_system_config_data->sip, digit_port_udp);
 	Udp.write(str);
 	Udp.endPacket();
 }
@@ -52,8 +57,7 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 	
 	if(get_packet_udp(str_test) != _sts_packet_success)
 		return _change_sts;
-
-
+	
 	JsonObject& root = jsonBuffer.parseObject(str_test);
 	if(root.success())
 	{
@@ -100,11 +104,15 @@ change_sts handler_wifi(data_iot* _data_iot_input, data_iot* _data_iot_output)
 					}
 					if(root2.containsKey("sip"))
 					{
-						String tmp_sip = root2["sip"];  
+						String tmp_sip = root2["sip"];
 						tmp_sip.toCharArray(ptr_system_config->sip,20);
 					}
+					if(root2.containsKey("port"))
+					{
+						String tmp_port = root2["port"];
+						tmp_port.toCharArray(ptr_system_config->port_udp,10);
+					}
 				}
-				
 				if(root.containsKey("pair_config"))
 				{
 					_data_iot_output->type_contents = _pair_config;
@@ -129,7 +137,7 @@ void send_data_to_server(data_iot* _data_input, json_builder_mode _Builder_mode)
 {
 	char packet_for_send[256];
 	json_packet_builder(packet_for_send, _data_input, _Builder_mode);
-	send_packet_udp(packet_for_send);
+	send_packet_udp(packet_for_send, _data_input);
 }
 
 void json_packet_builder(char *str_out, data_iot* _data_input, json_builder_mode _Builder_mode)
@@ -155,7 +163,7 @@ void json_packet_builder(char *str_out, data_iot* _data_input, json_builder_mode
 				sprintf(str_out + strlen(str_out), ",\"type\":\"imalive\"");
 				break;
 		}
-
+		
 		sprintf(str_out + strlen(str_out), ",\"data\":{");
 
 		for(int ctr = 0; ctr < 8; ctr++)

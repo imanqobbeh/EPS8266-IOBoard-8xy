@@ -71,6 +71,7 @@ void init_memory(init_memory_mode _sts_init_memory)
             write_data_memory("free", _dns1);
             write_data_memory("free", _dns2);
             write_data_memory("dhcp_on", _dhcp);
+            write_data_memory("6364", _port_udp);
             write_data_memory("free", _key_3des);
             delay(50);
         }

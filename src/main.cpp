@@ -27,7 +27,7 @@ void setup()
 	read_data_memory(_system_config_data->ssid, _ssid);
 	read_data_memory(_system_config_data->pass, _pass);
 	read_data_memory(_system_config_data->sip, _sip);
-	
+	read_data_memory(_system_config_data->port_udp, _port_udp);
 	// pair read from memory ---------------------------------------------------
 	pair_config_data_struct* _pair_config_data = data_iot_current.pair_config_data;
 	read_data_memory(_pair_config_data->pair_active, _pair_active);
@@ -193,6 +193,7 @@ void loop()
 						write_data_memory(_system_config_data->ssid, _ssid);
 						write_data_memory(_system_config_data->pass, _pass);
 						write_data_memory(_system_config_data->sip, _sip);
+						write_data_memory(_system_config_data->port_udp, _port_udp);
 						send_data_to_server(&data_iot_current, _json_system_conf);
 						_sts_led = _led_off;
 						led_blinker(_led_off);
